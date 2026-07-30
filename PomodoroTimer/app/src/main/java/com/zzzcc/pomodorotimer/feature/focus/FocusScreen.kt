@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +45,7 @@ enum class FocusTimerState {
 }
 
 @Composable
-fun FocusRoute() {
+fun FocusRoute(contentPadding: PaddingValues) {
     var remainingSeconds by rememberSaveable {
         mutableIntStateOf(FocusDurationSeconds)
     }
@@ -68,6 +69,7 @@ fun FocusRoute() {
     FocusScreen(
         remainingSeconds = remainingSeconds,
         timerState = timerState,
+        contentPadding = contentPadding,
         onPrimaryAction = {
             when (timerState) {
                 FocusTimerState.Idle -> timerState = FocusTimerState.Running
@@ -86,6 +88,7 @@ fun FocusRoute() {
 fun FocusScreen(
     remainingSeconds: Int,
     timerState: FocusTimerState,
+    contentPadding: PaddingValues,
     onPrimaryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -106,6 +109,7 @@ fun FocusScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .padding(contentPadding)
             .statusBarsPadding()
             .padding(horizontal = 24.dp)
     ) {
@@ -206,6 +210,7 @@ private fun FocusScreenPreview() {
         FocusScreen(
             remainingSeconds = FocusDurationSeconds,
             timerState = FocusTimerState.Idle,
+            contentPadding = PaddingValues(),
             onPrimaryAction = {}
         )
     }

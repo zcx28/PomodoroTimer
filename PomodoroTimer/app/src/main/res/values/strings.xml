@@ -8,4 +8,17 @@
     <string name="action_pause">暂停专注</string>
     <string name="action_resume">继续专注</string>
     <string name="action_restart">再来一轮</string>
+    <string name="nav_focus">专注</string>
+    <string name="nav_tasks">任务</string>
+    <string name="nav_statistics">统计</string>
+    <string name="nav_settings">设置</string>
+    <string name="tasks_title">任务</string>
+    <string name="tasks_summary">当前任务</string>
+    <string name="tasks_hint">任务管理功能将在下一阶段完善</string>
+    <string name="statistics_title">统计</string>
+    <string name="statistics_summary">今日专注</string>
+    <string name="statistics_value">0 分钟</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_focus_duration">专注时长</string>
+    <string name="settings_focus_duration_value">25 分钟</string>
 </resources>
