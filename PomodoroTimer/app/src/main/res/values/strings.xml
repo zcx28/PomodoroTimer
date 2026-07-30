@@ -21,4 +21,8 @@
     <string name="settings_title">设置</string>
     <string name="settings_focus_duration">专注时长</string>
     <string name="settings_focus_duration_value">25 分钟</string>
+    <string name="notification_channel_name">专注完成提醒</string>
+    <string name="notification_channel_description">番茄专注计时完成时提醒你</string>
+    <string name="notification_focus_finished_title">专注完成</string>
+    <string name="notification_focus_finished_message">做得很好，休息一下吧。</string>
 </resources>

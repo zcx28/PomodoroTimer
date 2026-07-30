@@ -5,7 +5,7 @@ import com.zzzcc.pomodorotimer.R
 
 enum class AppDestination(
     val route: String,
-    @StringRes val labelRes: Int,
+    @param:StringRes val labelRes: Int,
     val symbol: String
 ) {
     Focus(

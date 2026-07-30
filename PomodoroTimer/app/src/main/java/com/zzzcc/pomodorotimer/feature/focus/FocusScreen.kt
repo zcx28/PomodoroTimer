@@ -1,5 +1,10 @@
 package com.zzzcc.pomodorotimer.feature.focus
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,70 +21,56 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zzzcc.pomodorotimer.R
+import com.zzzcc.pomodorotimer.core.model.DefaultFocusDurationSeconds
+import com.zzzcc.pomodorotimer.core.model.FocusTimerState
 import com.zzzcc.pomodorotimer.ui.components.PomodoroCard
 import com.zzzcc.pomodorotimer.ui.components.PomodoroPrimaryButton
 import com.zzzcc.pomodorotimer.ui.theme.PomodoroTimerTheme
-import kotlinx.coroutines.delay
-
-private const val FocusDurationSeconds = 25 * 60
-
-enum class FocusTimerState {
-    Idle,
-    Running,
-    Paused,
-    Finished
-}
 
 @Composable
-fun FocusRoute(contentPadding: PaddingValues) {
-    var remainingSeconds by rememberSaveable {
-        mutableIntStateOf(FocusDurationSeconds)
-    }
-    var timerState by rememberSaveable {
-        mutableStateOf(FocusTimerState.Idle)
-    }
-
-    LaunchedEffect(timerState) {
-        if (timerState == FocusTimerState.Running) {
-            while (remainingSeconds > 0) {
-                delay(1_000L)
-                remainingSeconds -= 1
-            }
-
-            if (remainingSeconds == 0) {
-                timerState = FocusTimerState.Finished
-            }
-        }
-    }
+fun FocusRoute(
+    contentPadding: PaddingValues,
+    viewModel: FocusViewModel = viewModel()
+) {
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsState()
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = {}
+    )
 
     FocusScreen(
-        remainingSeconds = remainingSeconds,
-        timerState = timerState,
+        remainingSeconds = uiState.remainingSeconds,
+        timerState = uiState.timerState,
         contentPadding = contentPadding,
         onPrimaryAction = {
-            when (timerState) {
-                FocusTimerState.Idle -> timerState = FocusTimerState.Running
-                FocusTimerState.Running -> timerState = FocusTimerState.Paused
-                FocusTimerState.Paused -> timerState = FocusTimerState.Running
-                FocusTimerState.Finished -> {
-                    remainingSeconds = FocusDurationSeconds
-                    timerState = FocusTimerState.Idle
-                }
+            val startsTimer = uiState.timerState == FocusTimerState.Idle ||
+                uiState.timerState == FocusTimerState.Paused
+            val needsNotificationPermission =
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+
+            if (startsTimer && needsNotificationPermission) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
+
+            viewModel.onPrimaryAction()
         }
     )
 }
@@ -208,7 +199,7 @@ private fun formatTimerText(totalSeconds: Int): String {
 private fun FocusScreenPreview() {
     PomodoroTimerTheme {
         FocusScreen(
-            remainingSeconds = FocusDurationSeconds,
+            remainingSeconds = DefaultFocusDurationSeconds,
             timerState = FocusTimerState.Idle,
             contentPadding = PaddingValues(),
             onPrimaryAction = {}
