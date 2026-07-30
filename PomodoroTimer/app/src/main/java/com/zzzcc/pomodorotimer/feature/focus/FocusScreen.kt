@@ -1,4 +1,4 @@
-package com.zzzcc.pomodorotimer.ui.focus
+package com.zzzcc.pomodorotimer.feature.focus
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -53,7 +53,7 @@ enum class FocusTimerState {
 }
 
 @Composable
-fun PomodoroTimerApp() {
+fun FocusRoute() {
     var remainingSeconds by rememberSaveable {
         mutableIntStateOf(FocusDurationSeconds)
     }
