@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,20 +23,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.zzzcc.pomodorotimer.R
-import com.zzzcc.pomodorotimer.ui.theme.PomodoroBackground
-import com.zzzcc.pomodorotimer.ui.theme.PomodoroMutedText
-import com.zzzcc.pomodorotimer.ui.theme.PomodoroPrimary
-import com.zzzcc.pomodorotimer.ui.theme.PomodoroSurface
-import com.zzzcc.pomodorotimer.ui.theme.PomodoroText
+import com.zzzcc.pomodorotimer.ui.components.PomodoroCard
+import com.zzzcc.pomodorotimer.ui.components.PomodoroPrimaryButton
 import com.zzzcc.pomodorotimer.ui.theme.PomodoroTimerTheme
 import kotlinx.coroutines.delay
 
@@ -114,16 +105,14 @@ fun FocusScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(PomodoroBackground)
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .padding(horizontal = 24.dp)
     ) {
         Text(
             text = title,
-            color = PomodoroText,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = 29.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(top = 24.dp)
         )
 
@@ -140,24 +129,12 @@ fun FocusScreen(
 
         Spacer(modifier = Modifier.height(72.dp))
 
-        Button(
+        PomodoroPrimaryButton(
+            text = buttonLabel,
             onClick = onPrimaryAction,
             modifier = Modifier
-                .height(56.dp)
-                .align(Alignment.CenterHorizontally),
-            shape = RoundedCornerShape(28.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = PomodoroPrimary,
-                contentColor = Color.White
-            ),
-            contentPadding = ButtonDefaults.ContentPadding
-        ) {
-            Text(
-                text = buttonLabel,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
+                .align(Alignment.CenterHorizontally)
+        )
     }
 }
 
@@ -166,23 +143,23 @@ private fun TimerRing(
     timeText: String,
     modifier: Modifier = Modifier
 ) {
+    val ringColor = MaterialTheme.colorScheme.primary
+
     Box(
         modifier = modifier.size(280.dp),
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(
-                color = PomodoroPrimary,
+                color = ringColor,
                 style = Stroke(width = 12.dp.toPx())
             )
         }
 
         Text(
             text = timeText,
-            color = PomodoroText,
-            fontSize = 64.sp,
-            fontWeight = FontWeight.Bold,
-            lineHeight = 72.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.displayLarge,
             textAlign = TextAlign.Center
         )
     }
@@ -190,30 +167,27 @@ private fun TimerRing(
 
 @Composable
 private fun CurrentTaskCard(modifier: Modifier = Modifier) {
-    Surface(
+    PomodoroCard(
         modifier = modifier
             .fillMaxWidth()
-            .height(80.dp),
-        shape = RoundedCornerShape(20.dp),
-        color = PomodoroSurface
+            .height(80.dp)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = stringResource(R.string.current_task_label),
-                color = PomodoroMutedText,
-                fontSize = 14.sp,
-                lineHeight = 20.sp
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
             )
 
             Text(
                 text = stringResource(R.string.current_task_name),
-                color = PomodoroText,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 24.sp
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleMedium
             )
         }
     }

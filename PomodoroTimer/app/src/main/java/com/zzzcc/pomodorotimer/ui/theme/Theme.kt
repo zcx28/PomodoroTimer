@@ -10,7 +10,8 @@ private val PomodoroColorScheme = lightColorScheme(
     background = PomodoroBackground,
     onBackground = PomodoroText,
     surface = PomodoroSurface,
-    onSurface = PomodoroText
+    onSurface = PomodoroText,
+    onSurfaceVariant = PomodoroMutedText
 )
 
 @Composable
@@ -19,7 +20,8 @@ fun PomodoroTimerTheme(
 ) {
     MaterialTheme(
         colorScheme = PomodoroColorScheme,
-        typography = Typography,
+        typography = PomodoroTypography,
+        shapes = PomodoroShapes,
         content = content
     )
 }
