@@ -25,4 +25,9 @@
     <string name="notification_channel_description">番茄专注计时完成时提醒你</string>
     <string name="notification_focus_finished_title">专注完成</string>
     <string name="notification_focus_finished_message">做得很好，休息一下吧。</string>
+    <string name="network_title">网络连接</string>
+    <string name="network_checking">正在连接服务器…</string>
+    <string name="network_connected">已连接 · %1$s</string>
+    <string name="network_failed">连接失败，请检查网络</string>
+    <string name="network_retry">重新检测</string>
 </resources>

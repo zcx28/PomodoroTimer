@@ -16,7 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.zzzcc.pomodorotimer.feature.focus.FocusRoute
-import com.zzzcc.pomodorotimer.feature.settings.SettingsScreen
+import com.zzzcc.pomodorotimer.feature.settings.SettingsRoute
 import com.zzzcc.pomodorotimer.feature.statistics.StatisticsScreen
 import com.zzzcc.pomodorotimer.feature.tasks.TasksScreen
 
@@ -82,7 +82,7 @@ fun PomodoroAppNavigation() {
                 StatisticsScreen(contentPadding = innerPadding)
             }
             composable(AppDestination.Settings.route) {
-                SettingsScreen(contentPadding = innerPadding)
+                SettingsRoute(contentPadding = innerPadding)
             }
         }
     }
