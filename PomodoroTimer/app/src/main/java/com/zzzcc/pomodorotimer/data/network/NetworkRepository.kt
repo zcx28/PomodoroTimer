@@ -18,7 +18,7 @@ class NetworkRepository(
         runCatching {
             val request = Request.Builder()
                 .url(ConnectionCheckUrl)
-                .header("Accept", "application/vnd.github+json")
+                .header("Accept", "application/json")
                 .header("User-Agent", "PomodoroTimer-Android")
                 .build()
 
@@ -28,15 +28,19 @@ class NetworkRepository(
                 }
 
                 val responseJson = JSONObject(response.body.string())
-                val repositoryName = responseJson.getString("full_name")
-                ServerConnection(serverName = repositoryName)
+                check(responseJson.optBoolean("ok")) {
+                    "Backend health check failed"
+                }
+
+                val serviceName = responseJson.getString("service")
+                ServerConnection(serverName = "腾讯云 · $serviceName")
             }
         }
     }
 
     companion object {
         private const val ConnectionCheckUrl =
-            "https://api.github.com/repos/zcx28/PomodoroTimer"
+            "https://pomodoro-dev-d1gghiq6p79a72113-1452513516.ap-shanghai.app.tcloudbase.com/api/health"
 
         private val sharedClient = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
